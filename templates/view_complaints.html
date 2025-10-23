@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+{% block title %}View Complaints - Smart Complaint System{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-list-ul text-primary"></i> All Complaints</h2>
+    <a href="{{ url_for('submit_complaint') }}" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> New Complaint
+    </a>
+</div>
+
+{% if complaints %}
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i>
+                <strong>{{ complaints|length }}</strong> complaint(s) found. Click on images to view full size.
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th style="width: 60px;">ID</th>
+                    <th style="width: 120px;">Submitted By</th>
+                    <th style="width: 150px;">Location</th>
+                    <th style="width: 80px;">Coordinates</th>
+                    <th>Description</th>
+                    <th style="width: 100px;">Status</th>
+                    <th style="width: 130px;">Date</th>
+                    <th style="width: 80px;">Image</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for complaint in complaints %}
+                <tr>
+                    <td>
+                        <span class="badge bg-secondary">#{{ complaint.id }}</span>
+                    </td>
+                    <td>
+                        <div>
+                            <strong>{{ complaint.name }}</strong><br>
+                            <small class="text-muted">{{ complaint.email }}</small>
+                        </div>
+                    </td>
+                    <td>
+                        {% if complaint.location %}
+                            <i class="bi bi-geo-alt text-primary"></i>
+                            {{ complaint.location }}
+                        {% else %}
+                            <span class="text-muted">Not specified</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if complaint.latitude and complaint.longitude %}
+                            <small>
+                                <strong>Lat:</strong> {{ "%.4f"|format(complaint.latitude) }}<br>
+                                <strong>Lng:</strong> {{ "%.4f"|format(complaint.longitude) }}
+                            </small>
+                        {% else %}
+                            <span class="text-muted">N/A</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div style="max-width: 250px;">
+                            {{ complaint.description[:100] }}
+                            {% if complaint.description|length > 100 %}...{% endif %}
+                        </div>
+                    </td>
+                    <td>
+                        {% if complaint.status == 'Resolved' %}
+                            <span class="badge bg-success">
+                                <i class="bi bi-check-circle"></i> Resolved
+                            </span>
+                        {% elif complaint.status == 'In Progress' %}
+                            <span class="badge bg-warning">
+                                <i class="bi bi-clock"></i> In Progress
+                            </span>
+                        {% else %}
+                            <span class="badge bg-secondary">
+                                <i class="bi bi-hourglass"></i> Pending
+                            </span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <small>{{ complaint.timestamp }}</small>
+                    </td>
+                    <td>
+                        {% if complaint.image %}
+                            <img src="{{ url_for('static', filename=complaint.image) }}" 
+                                 class="complaint-image" 
+                                 alt="Complaint Image" 
+                                 title="Click to enlarge">
+                        {% else %}
+                            <span class="text-muted">No image</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Status Summary -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-bar-chart"></i> Status Summary</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {% set pending_count = complaints|selectattr("status", "equalto", "Pending")|list|length %}
+                        {% set progress_count = complaints|selectattr("status", "equalto", "In Progress")|list|length %}
+                        {% set resolved_count = complaints|selectattr("status", "equalto", "Resolved")|list|length %}
+
+                        <div class="col-md-4 text-center">
+                            <div class="bg-light p-3 rounded">
+                                <i class="bi bi-hourglass text-secondary fs-2"></i>
+                                <h4 class="text-secondary">{{ pending_count }}</h4>
+                                <p class="mb-0">Pending</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <div class="bg-light p-3 rounded">
+                                <i class="bi bi-clock text-warning fs-2"></i>
+                                <h4 class="text-warning">{{ progress_count }}</h4>
+                                <p class="mb-0">In Progress</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <div class="bg-light p-3 rounded">
+                                <i class="bi bi-check-circle text-success fs-2"></i>
+                                <h4 class="text-success">{{ resolved_count }}</h4>
+                                <p class="mb-0">Resolved</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% else %}
+    <div class="text-center py-5">
+        <i class="bi bi-inbox text-muted" style="font-size: 4rem;"></i>
+        <h4 class="text-muted mt-3">No Complaints Found</h4>
+        <p class="text-muted">Be the first to submit a complaint and help improve your community.</p>
+        <a href="{{ url_for('submit_complaint') }}" class="btn btn-primary btn-lg">
+            <i class="bi bi-plus-circle"></i> Submit First Complaint
+        </a>
+    </div>
+{% endif %}
+{% endblock %}

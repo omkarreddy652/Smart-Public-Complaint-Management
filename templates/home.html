@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% block title %}Home - Smart Complaint System{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container">
+        <h1><i class="bi bi-megaphone"></i> Smart Public Complaint System</h1>
+        <p class="lead">
+            Report public issues, track their resolution, and contribute to making your community safer and better. 
+            Join hands in creating a responsive civic environment.
+        </p>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <i class="bi bi-pencil-square text-primary" style="font-size: 3rem;"></i>
+                <h5 class="card-title mt-3">Submit Complaints</h5>
+                <p class="card-text">Report traffic issues, public problems, and infrastructure concerns with location details and photos.</p>
+                <a href="{{ url_for('submit_complaint') }}" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Submit Now
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <i class="bi bi-eye text-success" style="font-size: 3rem;"></i>
+                <h5 class="card-title mt-3">Track Status</h5>
+                <p class="card-text">Monitor the progress of all submitted complaints and see resolution updates in real-time.</p>
+                <a href="{{ url_for('view_complaints') }}" class="btn btn-success">
+                    <i class="bi bi-list-ul"></i> View All
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <i class="bi bi-geo-alt text-warning" style="font-size: 3rem;"></i>
+                <h5 class="card-title mt-3">Interactive Map</h5>
+                <p class="card-text">Visualize complaint locations on an interactive map to identify problem areas and trends.</p>
+                <a href="{{ url_for('traffic_map') }}" class="btn btn-warning">
+                    <i class="bi bi-map"></i> View Map
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <i class="bi bi-shield-check text-info" style="font-size: 3rem;"></i>
+                <h5 class="card-title mt-3">Admin Panel</h5>
+                <p class="card-text">Administrative interface for managing complaints, updating statuses, and system oversight.</p>
+                <a href="{{ url_for('admin_login') }}" class="btn btn-info">
+                    <i class="bi bi-person-gear"></i> Admin Access
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4><i class="bi bi-info-circle text-primary"></i> How It Works</h4>
+                <div class="row mt-4">
+                    <div class="col-md-3 text-center mb-3">
+                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                            <span class="fs-4 fw-bold">1</span>
+                        </div>
+                        <h6 class="mt-2">Report Issue</h6>
+                        <p class="small">Submit complaint with details and location</p>
+                    </div>
+                    <div class="col-md-3 text-center mb-3">
+                        <div class="bg-warning text-dark rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                            <span class="fs-4 fw-bold">2</span>
+                        </div>
+                        <h6 class="mt-2">Review Process</h6>
+                        <p class="small">Admin reviews and assigns status</p>
+                    </div>
+                    <div class="col-md-3 text-center mb-3">
+                        <div class="bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                            <span class="fs-4 fw-bold">3</span>
+                        </div>
+                        <h6 class="mt-2">Track Progress</h6>
+                        <p class="small">Monitor resolution status updates</p>
+                    </div>
+                    <div class="col-md-3 text-center mb-3">
+                        <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                            <span class="fs-4 fw-bold">4</span>
+                        </div>
+                        <h6 class="mt-2">Resolution</h6>
+                        <p class="small">Issue resolved and marked complete</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

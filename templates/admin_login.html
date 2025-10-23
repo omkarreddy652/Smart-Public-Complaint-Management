@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% block title %}Admin Login - Smart Complaint System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-4 col-md-6">
+        <div class="login-card">
+            <div class="card">
+                <div class="card-header bg-dark text-white text-center">
+                    <h3 class="mb-0">
+                        <i class="bi bi-shield-lock"></i> Admin Login
+                    </h3>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">
+                                <i class="bi bi-person"></i> Username
+                            </label>
+                            <input type="text" class="form-control" id="username" name="username" 
+                                   placeholder="Enter username" required autofocus>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="password" class="form-label">
+                                <i class="bi bi-lock"></i> Password
+                            </label>
+                            <input type="password" class="form-control" id="password" name="password" 
+                                   placeholder="Enter password" required>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-dark btn-lg">
+                                <i class="bi bi-box-arrow-in-right"></i> Login to Admin Panel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card-footer bg-light text-center">
+                    <small class="text-muted">
+                        <i class="bi bi-info-circle"></i> 
+                        Default credentials: <strong>admin</strong> / <strong>admin123</strong>
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Notice -->
+        <div class="alert alert-warning mt-3">
+            <i class="bi bi-exclamation-triangle"></i>
+            <strong>Security Notice:</strong> This is a demo system. Change default credentials for production use.
+        </div>
+    </div>
+</div>
+
+<div class="row justify-content-center mt-4">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-gear"></i> Admin Features</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-list-check text-primary fs-4 me-3"></i>
+                            <div>
+                                <h6 class="mb-1">View All Complaints</h6>
+                                <small class="text-muted">Access complete complaint database</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-pencil-square text-success fs-4 me-3"></i>
+                            <div>
+                                <h6 class="mb-1">Update Status</h6>
+                                <small class="text-muted">Change complaint resolution status</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-image text-warning fs-4 me-3"></i>
+                            <div>
+                                <h6 class="mb-1">View Attachments</h6>
+                                <small class="text-muted">Access uploaded complaint images</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-bar-chart text-info fs-4 me-3"></i>
+                            <div>
+                                <h6 class="mb-1">System Management</h6>
+                                <small class="text-muted">Monitor system performance</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Auto-fill demo credentials (for demo purposes only)
+document.addEventListener('DOMContentLoaded', function() {
+    const usernameField = document.getElementById('username');
+    const passwordField = document.getElementById('password');
+
+    // Add demo credentials button
+    const demoBtn = document.createElement('button');
+    demoBtn.type = 'button';
+    demoBtn.className = 'btn btn-outline-secondary btn-sm mt-2';
+    demoBtn.innerHTML = '<i class="bi bi-key"></i> Use Demo Credentials';
+    demoBtn.onclick = function() {
+        usernameField.value = 'admin';
+        passwordField.value = 'admin123';
+        usernameField.focus();
+    };
+
+    passwordField.parentNode.appendChild(demoBtn);
+});
+</script>
+{% endblock %}

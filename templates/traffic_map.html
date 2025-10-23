@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% block title %}Traffic Map - Smart Complaint System{% endblock %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2><i class="bi bi-map text-primary"></i> Complaints Map</h2>
+            <div>
+                <a href="{{ url_for('view_complaints') }}" class="btn btn-outline-primary me-2">
+                    <i class="bi bi-list-ul"></i> List View
+                </a>
+                <a href="{{ url_for('submit_complaint') }}" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Add Complaint
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if complaints %}
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="alert alert-success">
+                <i class="bi bi-geo-alt"></i>
+                <strong>{{ complaints|length }}</strong> complaint(s) with location data are displayed on the map below.
+            </div>
+        </div>
+    </div>
+
+    <!-- Map Container -->
+    <div class="row">
+        <div class="col-12">
+            <div class="map-container">
+                <div id="trafficMap" style="height: 100%; width: 100%;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Legend -->
+    <div class="row mt-3">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-palette"></i> Map Legend</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 d-flex align-items-center mb-2">
+                            <div style="width: 20px; height: 20px; background-color: #6c757d; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.3);" class="me-2"></div>
+                            <span>Pending Complaints</span>
+                        </div>
+                        <div class="col-md-4 d-flex align-items-center mb-2">
+                            <div style="width: 20px; height: 20px; background-color: #fd7e14; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.3);" class="me-2"></div>
+                            <span>In Progress</span>
+                        </div>
+                        <div class="col-md-4 d-flex align-items-center mb-2">
+                            <div style="width: 20px; height: 20px; background-color: #198754; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.3);" class="me-2"></div>
+                            <span>Resolved</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Complaints Summary Cards -->
+    <div class="row mt-4">
+        {% set pending_count = complaints|selectattr("status", "equalto", "Pending")|list|length %}
+        {% set progress_count = complaints|selectattr("status", "equalto", "In Progress")|list|length %}
+        {% set resolved_count = complaints|selectattr("status", "equalto", "Resolved")|list|length %}
+
+        <div class="col-md-4 mb-3">
+            <div class="card border-secondary">
+                <div class="card-body text-center">
+                    <i class="bi bi-hourglass text-secondary fs-1"></i>
+                    <h3 class="text-secondary mt-2">{{ pending_count }}</h3>
+                    <p class="text-muted mb-0">Pending Issues</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card border-warning">
+                <div class="card-body text-center">
+                    <i class="bi bi-clock text-warning fs-1"></i>
+                    <h3 class="text-warning mt-2">{{ progress_count }}</h3>
+                    <p class="text-muted mb-0">In Progress</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card border-success">
+                <div class="card-body text-center">
+                    <i class="bi bi-check-circle text-success fs-1"></i>
+                    <h3 class="text-success mt-2">{{ resolved_count }}</h3>
+                    <p class="text-muted mb-0">Resolved</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% else %}
+    <div class="text-center py-5">
+        <i class="bi bi-map text-muted" style="font-size: 4rem;"></i>
+        <h4 class="text-muted mt-3">No Location Data Available</h4>
+        <p class="text-muted">Submit complaints with latitude and longitude coordinates to see them on the map.</p>
+        <a href="{{ url_for('submit_complaint') }}" class="btn btn-primary btn-lg">
+            <i class="bi bi-plus-circle"></i> Submit Complaint with Location
+        </a>
+    </div>
+{% endif %}
+
+<!-- Pass complaint data to JavaScript -->
+<script>
+window.complaintsOnMap = [
+    {% for complaint in complaints %}
+    {
+        id: {{ complaint.id }},
+        latitude: {{ complaint.latitude or 'null' }},
+        longitude: {{ complaint.longitude or 'null' }},
+        location: "{{ complaint.location|e if complaint.location else 'Unknown Location' }}",
+        description: "{{ complaint.description[:100]|e }}{% if complaint.description|length > 100 %}...{% endif %}",
+        status: "{{ complaint.status|e }}",
+        name: "{{ complaint.name|e }}",
+        timestamp: "{{ complaint.timestamp }}"
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+];
+</script>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="{{ url_for('static', filename='js/map.js') }}"></script>
+{% endblock %}
