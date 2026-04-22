@@ -4,128 +4,123 @@ document.addEventListener('DOMContentLoaded', function() {
     const mapContainer = document.getElementById('trafficMap');
     if (!mapContainer) return;
 
-    // Create map centered on India
-    const map = L.map('trafficMap').setView([20.5937, 78.9629], 5);
+    // Create map centered on India or generally if no data
+    const map = L.map('trafficMap', {
+        zoomControl: false // We will add it back in a better position
+    }).setView([20.5937, 78.9629], 5);
 
-    // Add OpenStreetMap tiles
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 18,
-        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    // Add Zoom Control to Bottom Right
+    L.control.zoom({
+        position: 'bottomright'
+    }).addTo(map);
+
+    // Add CartoDB Positron Premium Tiles
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
     }).addTo(map);
 
     // Add markers for complaints if data exists
-    if (typeof window.complaintsOnMap !== 'undefined') {
+    const dataElement = document.getElementById('complaints-data');
+    if (dataElement) {
+        try {
+            window.complaintsOnMap = JSON.parse(dataElement.textContent);
+        } catch (e) {
+            console.error("Could not parse complaints data:", e);
+            window.complaintsOnMap = [];
+        }
         let validComplaints = 0;
 
         window.complaintsOnMap.forEach((complaint, index) => {
-            if (complaint.latitude && complaint.longitude) {
+            if (complaint.latitude && complaint.longitude && complaint.latitude !== "null" && complaint.longitude !== "null") {
                 validComplaints++;
 
-                // Create custom popup content
+                // Format timestamp beautifully
+                let timeStr = "";
+                if(complaint.timestamp) {
+                    timeStr = complaint.timestamp;
+                }
+
+                // Create custom popup content mapping to our new beautiful CSS
                 const popupContent = `
-                    <div style="min-width: 200px;">
-                        <h6 style="margin-bottom: 8px; color: #333;">
-                            📍 ${complaint.location || 'Unknown Location'}
-                        </h6>
-                        <p style="margin-bottom: 8px; font-size: 14px;">
-                            ${complaint.description || 'No description provided'}
-                        </p>
-                        <div style="font-size: 12px; color: #666;">
-                            <strong>Status:</strong> 
-                            <span style="color: ${getStatusColor(complaint.status)}">
+                    <div style="min-width: 240px; font-family: 'Outfit', sans-serif;">
+                        <div style="border-bottom: 2px solid ${getStatusColorRGB(complaint.status)}; margin-bottom: 10px; padding-bottom: 8px;">
+                            <span style="background: ${getStatusColorRGB(complaint.status)}; color: white; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; text-transform: uppercase;">
                                 ${complaint.status || 'Pending'}
                             </span>
+                            <h6 style="margin: 8px 0 0 0; color: #1e293b; font-weight: 700; font-size: 14px;">
+                                📍 ${complaint.location || 'Reported Incident'}
+                            </h6>
+                            <div style="font-size: 10px; color: #64748b; margin-top: 4px;">Ref #${complaint.id} &bull; ${timeStr}</div>
                         </div>
+                        <p style="margin-bottom: 0; font-size: 13px; color: #334155; line-height: 1.4;">
+                            ${complaint.description || 'No description provided'}
+                        </p>
                     </div>
                 `;
 
                 // Create marker with custom icon based on status
                 const marker = L.marker([complaint.latitude, complaint.longitude], {
-                    icon: getStatusIcon(complaint.status)
+                    icon: getStatusIcon(complaint.status),
+                    title: `Incident #${complaint.id}`
                 }).addTo(map);
 
-                marker.bindPopup(popupContent);
+                marker.bindPopup(popupContent, {
+                    closeButton: false,
+                    className: 'custom-popup-wrapper'
+                });
             }
         });
 
         // Adjust map view if we have complaints
         if (validComplaints > 0) {
-            const group = new L.featureGroup(
-                window.complaintsOnMap
-                    .filter(c => c.latitude && c.longitude)
-                    .map(c => L.marker([c.latitude, c.longitude]))
-            );
-            map.fitBounds(group.getBounds().pad(0.1));
+            const validPoints = window.complaintsOnMap
+                    .filter(c => c.latitude && c.longitude && c.latitude !== "null" && c.longitude !== "null")
+                    .map(c => [c.latitude, c.longitude]);
+                    
+            if(validPoints.length > 0) {
+                const bounds = L.latLngBounds(validPoints);
+                map.fitBounds(bounds, { padding: [50, 50], maxZoom: 15 });
+            }
         }
-
-        // Update info display
-        updateMapInfo(validComplaints);
     }
 });
 
-function getStatusColor(status) {
-    switch(status?.toLowerCase()) {
-        case 'resolved': return '#198754';
-        case 'in progress': return '#fd7e14';
-        case 'pending':
-        default: return '#6c757d';
-    }
+function getStatusColorRGB(status) {
+    const s = status?.toLowerCase() || '';
+    if (s.includes('resolved')) return '#10b981'; // success
+    if (s.includes('progress')) return '#f59e0b'; // warning
+    return '#0f172a'; // pending/dark
+}
+
+function getStatusClass(status) {
+    const s = status?.toLowerCase() || '';
+    if (s.includes('resolved')) return 'resolved';
+    if (s.includes('progress')) return 'progress';
+    return 'pending';
 }
 
 function getStatusIcon(status) {
-    const colors = {
-        'resolved': '#198754',
-        'in progress': '#fd7e14',
-        'pending': '#6c757d'
-    };
-
-    const color = colors[status?.toLowerCase()] || colors['pending'];
-
+    const cls = getStatusClass(status);
     return L.divIcon({
-        html: `<div style="background-color: ${color}; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"></div>`,
-        iconSize: [20, 20],
+        html: `<div class="marker-pin ${cls}"></div><div style="width: 10px; height: 10px; background: white; border-radius: 50%; position: absolute; top: 7px; left: 7px; z-index: 2;"></div>`,
+        iconSize: [24, 24],
+        iconAnchor: [12, 24],
+        popupAnchor: [0, -20],
         className: 'custom-marker'
     });
 }
 
-function updateMapInfo(count) {
-    const infoDiv = document.createElement('div');
-    infoDiv.className = 'alert alert-info mt-3';
-    infoDiv.innerHTML = `
-        📊 <strong>${count}</strong> complaints with location data are displayed on the map.
-        ${count === 0 ? 'Submit complaints with latitude/longitude to see them here!' : ''}
-    `;
-
-    const mapContainer = document.getElementById('trafficMap');
-    if (mapContainer && mapContainer.parentNode) {
-        mapContainer.parentNode.insertBefore(infoDiv, mapContainer.nextSibling);
+// Add CSS dynamically for Leaflet Popups to match our style
+const style = document.createElement('style');
+style.innerHTML = `
+    .leaflet-popup-content-wrapper {
+        border-radius: 12px;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        padding: 4px;
     }
-}
-
-// Add click handler for complaint images (modal view)
-document.addEventListener('DOMContentLoaded', function() {
-    const images = document.querySelectorAll('.complaint-image');
-    images.forEach(img => {
-        img.addEventListener('click', function() {
-            // Create modal for image viewing
-            const modal = document.createElement('div');
-            modal.style.cssText = `
-                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-                background: rgba(0,0,0,0.8); z-index: 9999; display: flex;
-                align-items: center; justify-content: center; cursor: pointer;
-            `;
-
-            const modalImg = document.createElement('img');
-            modalImg.src = this.src;
-            modalImg.style.cssText = `
-                max-width: 90%; max-height: 90%; border-radius: 8px;
-                box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-            `;
-
-            modal.appendChild(modalImg);
-            document.body.appendChild(modal);
-
-            modal.addEventListener('click', () => modal.remove());
-        });
-    });
-});
+    .leaflet-popup-tip {
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+`;
+document.head.appendChild(style);

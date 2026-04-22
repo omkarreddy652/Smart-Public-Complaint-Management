@@ -1,103 +1,99 @@
 {% extends 'base.html' %}
-{% block title %}Submit Complaint - Smart Complaint System{% endblock %}
+{% block title %}Submit Complaint - RESOLVE X{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
+<div class="row justify-content-center py-4">
     <div class="col-lg-8">
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                <h3 class="card-title mb-0">
-                    <i class="bi bi-plus-circle"></i> Submit a Public Complaint
+        <div class="card border-0 shadow-lg">
+            <div class="card-header bg-transparent border-bottom-0 pt-4 pb-0 px-4">
+                <h3 class="mb-0 fw-bold text-primary d-flex align-items-center gap-2">
+                    <i class="bi bi-file-earmark-plus-fill fs-3 text-primary"></i> 
+                    File a New Report
                 </h3>
+                <p class="text-muted mt-2 mb-0">Help us identify issues by providing accurate details below.</p>
             </div>
-            <div class="card-body">
-                <form method="POST" enctype="multipart/form-data">
-                    <!-- Personal Information -->
-                    <h5 class="text-primary mb-3">
-                        <i class="bi bi-person"></i> Personal Information
-                    </h5>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="name" class="form-label">Full Name *</label>
-                            <input type="text" class="form-control" id="name" name="name" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="email" class="form-label">Email Address *</label>
-                            <input type="email" class="form-control" id="email" name="email" required>
-                        </div>
-                    </div>
-
-                    <!-- Location Information -->
-                    <h5 class="text-primary mb-3 mt-4">
-                        <i class="bi bi-geo-alt"></i> Location Details
-                    </h5>
-                    <div class="row mb-3">
-                        <div class="col-md-12">
-                            <label for="location" class="form-label">Location Description</label>
-                            <input type="text" class="form-control" id="location" name="location" 
-                                   placeholder="e.g., Near Central Park, Main Street, City">
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="latitude" class="form-label">Latitude</label>
-                            <input type="number" step="any" class="form-control" id="latitude" name="latitude" 
-                                   placeholder="e.g., 28.6139">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="longitude" class="form-label">Longitude</label>
-                            <input type="number" step="any" class="form-control" id="longitude" name="longitude" 
-                                   placeholder="e.g., 77.2090">
-                        </div>
-                    </div>
-                    <div class="alert alert-info">
-                        <i class="bi bi-info-circle"></i>
-                        <strong>Tip:</strong> You can get coordinates from Google Maps by right-clicking on a location.
-                    </div>
-
-                    <!-- Complaint Details -->
-                    <h5 class="text-primary mb-3 mt-4">
-                        <i class="bi bi-chat-square-text"></i> Complaint Details
-                    </h5>
-                    <div class="mb-3">
-                        <label for="description" class="form-label">Description of the Issue *</label>
-                        <textarea class="form-control" id="description" name="description" rows="4" 
-                                  placeholder="Please describe the issue in detail..." required></textarea>
-                    </div>
-
-                    <!-- File Upload -->
-                    <div class="mb-4">
-                        <label for="image" class="form-label">Upload Photo (Optional)</label>
-                        <input class="form-control" type="file" id="image" name="image" 
-                               accept="image/png,image/jpg,image/jpeg,image/gif">
-                        <div class="form-text">
-                            <i class="bi bi-camera"></i> 
-                            Supported formats: PNG, JPG, JPEG, GIF (Max size: 5MB)
+            <div class="card-body p-4">
+                <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate id="complaintForm">
+                    
+                    <!-- Personal Info Segment -->
+                    <div class="p-3 bg-light rounded-3 mb-4 border border-1 border-light">
+                        <h6 class="text-uppercase fw-bold text-secondary mb-3 small tracking-wide">
+                            <i class="bi bi-person me-1"></i> Contact Information
+                        </h6>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="name" class="form-label">Full Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="name" name="name" required placeholder="John Doe">
+                                <div class="invalid-feedback">Please provide your name.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" id="email" name="email" required placeholder="john@example.com">
+                                <div class="invalid-feedback">Please provide a valid email.</div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Submit Button -->
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary btn-lg">
-                            <i class="bi bi-send"></i> Submit Complaint
+                    <!-- Location Segment -->
+                    <div class="p-3 bg-light rounded-3 mb-4 border border-1 border-light">
+                        <h6 class="text-uppercase fw-bold text-secondary mb-3 small tracking-wide">
+                            <i class="bi bi-geo-alt me-1"></i> Location Details
+                        </h6>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-12">
+                                <label for="location" class="form-label">Location Description</label>
+                                <input type="text" class="form-control" id="location" name="location" 
+                                       placeholder="e.g., Near Central Park, Main Street, City...">
+                            </div>
+                        </div>
+                        <div class="row g-3 align-items-end">
+                            <div class="col-md-4">
+                                <label for="latitude" class="form-label">Latitude</label>
+                                <input type="number" step="any" class="form-control text-muted bg-white" id="latitude" name="latitude" readonly placeholder="0.0000">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="longitude" class="form-label">Longitude</label>
+                                <input type="number" step="any" class="form-control text-muted bg-white" id="longitude" name="longitude" readonly placeholder="0.0000">
+                            </div>
+                            <div class="col-md-4">
+                                <button type="button" id="getLocationBtn" class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center gap-2" style="height: 48px;">
+                                    <i class="bi bi-crosshair"></i> Auto-Locate
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-text mt-2 text-muted small">
+                            <i class="bi bi-info-circle"></i> We strongly recommend using Auto-Locate to provide precise GPS coordinates map plotting.
+                        </div>
+                    </div>
+
+                    <!-- Issue Details -->
+                    <div class="p-3 bg-light rounded-3 mb-4 border border-1 border-light">
+                        <h6 class="text-uppercase fw-bold text-secondary mb-3 small tracking-wide">
+                            <i class="bi bi-chat-square-text me-1"></i> Issue Specifics
+                        </h6>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="description" name="description" rows="4" 
+                                      placeholder="Please describe the issue in maximum detail so officials can understand the situation clearly." required></textarea>
+                            <div class="invalid-feedback">A detailed description is required.</div>
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="image" class="form-label">Evidence Photo (Optional)</label>
+                            <input class="form-control" type="file" id="image" name="image" accept="image/png,image/jpg,image/jpeg,image/gif">
+                            <div class="form-text mt-2">
+                                <i class="bi bi-camera me-1"></i> Formats: PNG, JPG, GIF (Max size: 5MB)
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit -->
+                    <div class="mt-4 pt-2 border-top d-flex gap-3">
+                        <button type="submit" class="btn btn-primary px-5 py-2 fs-5 flex-grow-1">
+                            <i class="bi bi-send-fill me-2"></i> Submit Final Report
                         </button>
                     </div>
                 </form>
-            </div>
-        </div>
-
-        <!-- Help Section -->
-        <div class="card mt-4">
-            <div class="card-body">
-                <h5 class="text-success">
-                    <i class="bi bi-question-circle"></i> Need Help?
-                </h5>
-                <ul class="list-unstyled">
-                    <li><i class="bi bi-check-circle text-success"></i> Provide as much detail as possible</li>
-                    <li><i class="bi bi-check-circle text-success"></i> Include photos for better understanding</li>
-                    <li><i class="bi bi-check-circle text-success"></i> Add precise location coordinates when possible</li>
-                    <li><i class="bi bi-check-circle text-success"></i> Check complaint status in the "View Complaints" section</li>
-                </ul>
             </div>
         </div>
     </div>
@@ -106,22 +102,24 @@
 
 {% block extra_js %}
 <script>
-// Get current location if user allows
-document.addEventListener('DOMContentLoaded', function() {
-    // Add button to get current location
-    const locationRow = document.querySelector('.row.mb-3:has(#latitude)');
-    if (locationRow) {
-        const locationBtn = document.createElement('div');
-        locationBtn.className = 'col-12 mt-2';
-        locationBtn.innerHTML = `
-            <button type="button" id="getLocationBtn" class="btn btn-outline-primary btn-sm">
-                <i class="bi bi-crosshair"></i> Get Current Location
-            </button>
-        `;
-        locationRow.appendChild(locationBtn);
+// Form validation
+(function () {
+  'use strict'
+  var forms = document.querySelectorAll('.needs-validation')
+  Array.prototype.slice.call(forms).forEach(function (form) {
+    form.addEventListener('submit', function (event) {
+      if (!form.checkValidity()) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+      form.classList.add('was-validated')
+    }, false)
+  })
+})()
 
-        document.getElementById('getLocationBtn').addEventListener('click', getCurrentLocation);
-    }
+// Get location
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('getLocationBtn').addEventListener('click', getCurrentLocation);
 });
 
 function getCurrentLocation() {
@@ -129,38 +127,35 @@ function getCurrentLocation() {
     const originalContent = btn.innerHTML;
 
     if ("geolocation" in navigator) {
-        btn.innerHTML = '<i class="bi bi-arrow-clockwise spin"></i> Getting Location...';
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Locating...';
         btn.disabled = true;
 
         navigator.geolocation.getCurrentPosition(
             function(position) {
                 document.getElementById('latitude').value = position.coords.latitude.toFixed(6);
                 document.getElementById('longitude').value = position.coords.longitude.toFixed(6);
-                btn.innerHTML = '<i class="bi bi-check-circle text-success"></i> Location Added';
+                
+                btn.classList.remove('btn-outline-primary');
+                btn.classList.add('btn-success');
+                btn.innerHTML = '<i class="bi bi-check-circle-fill"></i> Located';
+                
                 setTimeout(() => {
+                    btn.classList.remove('btn-success');
+                    btn.classList.add('btn-outline-primary');
                     btn.innerHTML = originalContent;
                     btn.disabled = false;
-                }, 2000);
+                }, 3000);
             },
             function(error) {
-                alert('Error getting location: ' + error.message);
+                alert('We could not get your location. Please check browser permissions.');
                 btn.innerHTML = originalContent;
                 btn.disabled = false;
-            }
+            },
+            { timeout: 10000 }
         );
     } else {
         alert("Geolocation is not supported by this browser.");
     }
 }
 </script>
-<style>
-.spin {
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-</style>
 {% endblock %}

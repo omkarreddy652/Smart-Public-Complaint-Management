@@ -170,7 +170,7 @@ def delete_complaint(complaint_id):
     return redirect(url_for('admin_panel'))
 
 if __name__ == '__main__':
-    print("🚀 Starting Smart Complaint System...")
+    print("🚀 Starting RESOLVE X...")
     print("📱 Access at: http://localhost:5000")
     print("🔐 Admin: admin / admin123")
     app.run(debug=True)

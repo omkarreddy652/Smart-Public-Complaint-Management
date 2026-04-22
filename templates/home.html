@@ -1,104 +1,126 @@
 {% extends 'base.html' %}
-{% block title %}Home - Smart Complaint System{% endblock %}
+{% block title %}RESOLVE X{% endblock %}
 
 {% block content %}
-<div class="hero-section">
-    <div class="container">
-        <h1><i class="bi bi-megaphone"></i> Smart Public Complaint System</h1>
-        <p class="lead">
-            Report public issues, track their resolution, and contribute to making your community safer and better. 
-            Join hands in creating a responsive civic environment.
+<div class="row align-items-center mb-5 hero-section">
+    <div class="col-12 z-1">
+        <h1 class="display-4 fw-bolder mb-3">
+            <i class="bi bi- megaphone-fill me-2 opacity-75"></i>Empower Your Community
+        </h1>
+        <p class="lead mb-4 fw-light text-white opacity-75 mx-auto" style="max-width: 700px;">
+            Report public issues, track their resolution in real-time, and contribute to making your neighbourhood safer, cleaner, and smarter.
         </p>
-    </div>
-</div>
-
-<div class="row mt-5">
-    <div class="col-lg-3 col-md-6 mb-4">
-        <div class="card h-100 text-center">
-            <div class="card-body">
-                <i class="bi bi-pencil-square text-primary" style="font-size: 3rem;"></i>
-                <h5 class="card-title mt-3">Submit Complaints</h5>
-                <p class="card-text">Report traffic issues, public problems, and infrastructure concerns with location details and photos.</p>
-                <a href="{{ url_for('submit_complaint') }}" class="btn btn-primary">
-                    <i class="bi bi-plus-circle"></i> Submit Now
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-lg-3 col-md-6 mb-4">
-        <div class="card h-100 text-center">
-            <div class="card-body">
-                <i class="bi bi-eye text-success" style="font-size: 3rem;"></i>
-                <h5 class="card-title mt-3">Track Status</h5>
-                <p class="card-text">Monitor the progress of all submitted complaints and see resolution updates in real-time.</p>
-                <a href="{{ url_for('view_complaints') }}" class="btn btn-success">
-                    <i class="bi bi-list-ul"></i> View All
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-lg-3 col-md-6 mb-4">
-        <div class="card h-100 text-center">
-            <div class="card-body">
-                <i class="bi bi-geo-alt text-warning" style="font-size: 3rem;"></i>
-                <h5 class="card-title mt-3">Interactive Map</h5>
-                <p class="card-text">Visualize complaint locations on an interactive map to identify problem areas and trends.</p>
-                <a href="{{ url_for('traffic_map') }}" class="btn btn-warning">
-                    <i class="bi bi-map"></i> View Map
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-lg-3 col-md-6 mb-4">
-        <div class="card h-100 text-center">
-            <div class="card-body">
-                <i class="bi bi-shield-check text-info" style="font-size: 3rem;"></i>
-                <h5 class="card-title mt-3">Admin Panel</h5>
-                <p class="card-text">Administrative interface for managing complaints, updating statuses, and system oversight.</p>
-                <a href="{{ url_for('admin_login') }}" class="btn btn-info">
-                    <i class="bi bi-person-gear"></i> Admin Access
-                </a>
-            </div>
+        <div class="d-flex justify-content-center gap-3 mt-4">
+            <a href="{{ url_for('submit_complaint') }}" class="btn btn-light btn-lg px-4 text-primary fw-bold shadow">
+                <i class="bi bi-cursor-fill me-2"></i> Report an Issue
+            </a>
+            <a href="{{ url_for('traffic_map') }}" class="btn btn-outline-light btn-lg px-4 fw-medium">
+                <i class="bi bi-map me-2"></i> View Live Map
+            </a>
         </div>
     </div>
 </div>
 
-<div class="row mt-5">
+<div class="row g-4 mt-2">
+    <div class="col-lg-3 col-md-6">
+        <div class="card h-100 text-center border-0">
+            <div class="card-body p-4 d-flex flex-column align-items-center">
+                <div class="rounded-circle bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+                    <i class="bi bi-pencil-square" style="font-size: 2.5rem;"></i>
+                </div>
+                <h5 class="card-title fw-bold">Submit Seamlessly</h5>
+                <p class="card-text text-muted mb-4 flex-grow-1">Report traffic issues, public problems, and infrastructure concerns easily with precise GPS locations and photos.</p>
+                <a href="{{ url_for('submit_complaint') }}" class="btn btn-primary w-100 mt-auto">
+                    Submit Now
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6">
+        <div class="card h-100 text-center border-0">
+            <div class="card-body p-4 d-flex flex-column align-items-center">
+                <div class="rounded-circle bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+                    <i class="bi bi-activity" style="font-size: 2.5rem;"></i>
+                </div>
+                <h5 class="card-title fw-bold">Track Status</h5>
+                <p class="card-text text-muted mb-4 flex-grow-1">Monitor the progress of all submitted complaints and see verified resolution updates in real-time.</p>
+                <a href="{{ url_for('view_complaints') }}" class="btn btn-success w-100 mt-auto">
+                    View Tracker
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6">
+        <div class="card h-100 text-center border-0">
+            <div class="card-body p-4 d-flex flex-column align-items-center">
+                <div class="rounded-circle bg-warning bg-opacity-10 text-warning d-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+                    <i class="bi bi-geo-alt-fill" style="font-size: 2.5rem;"></i>
+                </div>
+                <h5 class="card-title fw-bold">Interactive Map</h5>
+                <p class="card-text text-muted mb-4 flex-grow-1">Visualize complaint locations visually on a responsive map to easily identify problem areas and major trends.</p>
+                <a href="{{ url_for('traffic_map') }}" class="btn btn-warning w-100 mt-auto">
+                    Open Map
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6">
+        <div class="card h-100 text-center border-0">
+            <div class="card-body p-4 d-flex flex-column align-items-center">
+                <div class="rounded-circle bg-info bg-opacity-10 text-info d-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+                    <i class="bi bi-shield-check" style="font-size: 2.5rem;"></i>
+                </div>
+                <h5 class="card-title fw-bold">Admin Portal</h5>
+                <p class="card-text text-muted mb-4 flex-grow-1">Secure administrative interface for public officials to manage complaints, update statuses, and oversee the system.</p>
+                <a href="{{ url_for('admin_login') }}" class="btn btn-info w-100 mt-auto">
+                    Admin Access
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5 mb-4">
     <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <h4><i class="bi bi-info-circle text-primary"></i> How It Works</h4>
-                <div class="row mt-4">
-                    <div class="col-md-3 text-center mb-3">
-                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-                            <span class="fs-4 fw-bold">1</span>
+        <div class="card border-0 bg-transparent shadow-none">
+            <div class="card-body p-0">
+                <h3 class="text-center fw-bold mb-5 text-dark">
+                    <i class="bi bi-rocket-takeoff text-primary me-2"></i> How It Works
+                </h3>
+                <div class="row position-relative">
+                    <!-- Optional connecting line behind circles (desktops only) -->
+                    <div class="d-none d-md-block position-absolute" style="top: 30px; left: 10%; right: 10%; height: 2px; background: #e2e8f0; z-index: 1;"></div>
+                    
+                    <div class="col-md-3 text-center mb-4 z-2 position-relative">
+                        <div class="bg-primary text-white rounded-circle shadow-lg d-inline-flex align-items-center justify-content-center mx-auto mb-3" style="width: 65px; height: 65px; border: 4px solid white;">
+                            <span class="fs-4 fw-bolder">1</span>
                         </div>
-                        <h6 class="mt-2">Report Issue</h6>
-                        <p class="small">Submit complaint with details and location</p>
+                        <h5 class="fw-bold text-dark">Report Issue</h5>
+                        <p class="text-muted small px-2">Submit a form with descriptions, uploaded photos, and location.</p>
                     </div>
-                    <div class="col-md-3 text-center mb-3">
-                        <div class="bg-warning text-dark rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-                            <span class="fs-4 fw-bold">2</span>
+                    <div class="col-md-3 text-center mb-4 z-2 position-relative">
+                        <div class="bg-warning text-white rounded-circle shadow-lg d-inline-flex align-items-center justify-content-center mx-auto mb-3" style="width: 65px; height: 65px; border: 4px solid white;">
+                            <span class="fs-4 fw-bolder">2</span>
                         </div>
-                        <h6 class="mt-2">Review Process</h6>
-                        <p class="small">Admin reviews and assigns status</p>
+                        <h5 class="fw-bold text-dark">Review Process</h5>
+                        <p class="text-muted small px-2">A verified official reviews the submission and flags it in progress.</p>
                     </div>
-                    <div class="col-md-3 text-center mb-3">
-                        <div class="bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-                            <span class="fs-4 fw-bold">3</span>
+                    <div class="col-md-3 text-center mb-4 z-2 position-relative">
+                        <div class="bg-info text-white rounded-circle shadow-lg d-inline-flex align-items-center justify-content-center mx-auto mb-3" style="width: 65px; height: 65px; border: 4px solid white;">
+                            <span class="fs-4 fw-bolder">3</span>
                         </div>
-                        <h6 class="mt-2">Track Progress</h6>
-                        <p class="small">Monitor resolution status updates</p>
+                        <h5 class="fw-bold text-dark">Track Status</h5>
+                        <p class="text-muted small px-2">Monitor the progress publicly on the platform via trackers or maps.</p>
                     </div>
-                    <div class="col-md-3 text-center mb-3">
-                        <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-                            <span class="fs-4 fw-bold">4</span>
+                    <div class="col-md-3 text-center mb-4 z-2 position-relative">
+                        <div class="bg-success text-white rounded-circle shadow-lg d-inline-flex align-items-center justify-content-center mx-auto mb-3" style="width: 65px; height: 65px; border: 4px solid white;">
+                            <span class="fs-4 fw-bolder">4</span>
                         </div>
-                        <h6 class="mt-2">Resolution</h6>
-                        <p class="small">Issue resolved and marked complete</p>
+                        <h5 class="fw-bold text-dark">Resolution</h5>
+                        <p class="text-muted small px-2">The issue is successfully resolved and marked complete for everyone.</p>
                     </div>
                 </div>
             </div>
